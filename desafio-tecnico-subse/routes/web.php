@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ViajesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('app');
 })->name('app');
+
+// Ruta para el guardado de viajes, utiliza el método "store" del controlador "ViajesController".
+Route::post('/', [ViajesController::class, 'store'])->name('viajes.store');
