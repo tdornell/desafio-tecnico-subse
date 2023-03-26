@@ -14,7 +14,8 @@
                 <p class="card-text">Suba el archivo CSV con los datos de los agentes que viajaron.</p>
 
                 <!-- Formulario para subir el CSV -->
-                <form action="" method="POST" enctype="multipart/form-data">
+                <!-- El formulario envía el archivo a la ruta 'viajes.store' para procesarlo y guardar los datos en la base de datos -->
+                <form action="{{ route('viajes.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label for="csv_file" class="form-label" aria-required="true">Archivo .csv: <span class="text-danger">*</span></label>
@@ -24,6 +25,20 @@
                 </form>
                 <!-- Fin del formulario -->
 
+                <!-- Muestra un mensaje de éxito si se cargaron correctamente los datos -->
+                @if (session('success'))
+                    <div class="alert alert-success mt-3" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <!-- Muestra un mensaje de error si el archivo no tiene el formato correcto -->
+                @error('format')
+                    <div class="alert alert-danger mt-3" role="alert">
+                        {!! nl2br(e($message)) !!}
+                    </div>
+                @enderror
+                
             </div>
         </div>
     </div>
