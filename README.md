@@ -28,7 +28,7 @@ Este proyecto se ha desarrollado con Laravel y MySQL. A continuación se detalla
     composer install
     ```
 
-4. Crear una base de datos en MySQL y configurar las credenciales en el archivo [.env](desafio-tecnico-subse/.env#L11):
+4. Crear una base de datos en MySQL y configurar las credenciales en el archivo `desafio-tecnico-subse/.env`:
     ``` sh
     ...
     DB_CONNECTION=mysql
@@ -59,7 +59,7 @@ Este proyecto se ha desarrollado con Laravel y MySQL. A continuación se detalla
     - Apellido
     - Documento
     - Organismo
-    - Viáticos asignados (número decimal con hasta 10 dígitos enteros y 2 decimales)
+    - Viáticos asignados (número decimal con hasta 10 dígitos enteros)
     - Fecha de inicio del viaje (YYYY-MM-DD)
     - Fecha de fin del viaje (YYYY-MM-DD)
 
