@@ -12,6 +12,7 @@
             <div class="card-body">
                 <h5 class="card-title">Viajes</h5>
                 <p class="card-text">Suba el archivo CSV con los datos de los agentes que viajaron.</p>
+                <p class="card-text">Los datos deben seguir el siguiente orden: nombre, apellido, documento, organismo, viaticos, fecha_inicio, fecha_fin</p>
 
                 <!-- Formulario para subir el CSV -->
                 <!-- El formulario envía el archivo a la ruta 'viajes.store' para procesarlo y guardar los datos en la base de datos -->
@@ -34,6 +35,13 @@
 
                 <!-- Muestra un mensaje de error si el archivo no tiene el formato correcto -->
                 @error('format')
+                    <div class="alert alert-danger mt-3" role="alert">
+                        {!! nl2br(e($message)) !!}
+                    </div>
+                @enderror
+
+                <!-- Muestra un mensaje de error si los tipos de datos no son correctos -->
+                @error('datatype')
                     <div class="alert alert-danger mt-3" role="alert">
                         {!! nl2br(e($message)) !!}
                     </div>

@@ -20,11 +20,6 @@ class ViajesController extends Controller
 
     public function store(Request $request){
 
-        /** 
-         * TODO: 
-         * Validar que los tipos de datos de cada campo sean correctos.
-         */ 
-
         // Valida que se haya seleccionado un archivo.
         if (!$request->hasFile('csv_file')) {
             return redirect()->back()->withErrors(
@@ -68,6 +63,9 @@ class ViajesController extends Controller
         while (!$csv->eof()) {
             $line = $csv->fgetcsv();
 
+            // Array para guardar los errores de la línea actual.
+            $line_errors = [];
+
             // Valida que la línea tenga el formato correcto.
             if (count($line) !== 7) {
                 return redirect()->back()->withErrors(
@@ -77,7 +75,42 @@ class ViajesController extends Controller
                                     "Verifique que cada fila tenga exactamente 7 campos."
                     ]);
             } else {
-                // Si la línea tiene el formato correcto, crea el objeto Viaje y lo guarda en el array.
+                
+                if (empty($line[0]) || !is_string($line[0])) {
+                    $line_errors[] = "El campo 'nombre' debe ser un string no vacío.";
+                }
+                if (empty($line[1]) || !is_string($line[1])) {
+                    $line_errors[] = "El campo 'apellido' debe ser un string no vacío.";
+                }
+                if (empty($line[2]) || !is_string($line[2])) {
+                    $line_errors[] = "El campo 'documento' debe ser un número.";
+                }
+                if (empty($line[3]) || !is_string($line[3])) {
+                    $line_errors[] = "El campo 'organismo' debe ser un string no vacío.";
+                }
+
+                // Valida que el campo 'viaticos' sea un número de hasta 10 dígitos.
+                if (!preg_match('/^\d{1,10}(\.\d+)?$/', $line[4])) {
+                    $line_errors[] = "El campo viaticos debe ser un número de hasta 10 dígitos.";
+                }
+
+                // Valida que el campo 'fecha_inicio' sea una fecha válida en formato 'YYYY-MM-DD'.
+                if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $line[5]) || !strtotime($line[5])) {
+                    $line_errors[] = "El campo 'fecha_inicio' debe ser una fecha válida en formato 'YYYY-MM-DD'.";
+                }
+
+                // Valida que el campo 'fecha_fin' sea una fecha válida en formato 'YYYY-MM-DD'.
+                if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $line[6]) || !strtotime($line[6])) {
+                    $line_errors[] = "El campo 'fecha_fin' debe ser una fecha válida en formato 'YYYY-MM-DD'.";
+                }
+                
+                // Si la línea tiene errores, crea el mensaje de error y redirige a la página anterior.
+                if (!empty($line_errors)) {
+                    $error_message = "Error en la línea " . $line_number . ":\n" . implode("\n", $line_errors);
+                    return redirect()->back()->withErrors(['datatype' => $error_message]);
+                }
+
+                // Si la línea tiene el formato y tipo de datos correctos, se crea el objeto Viaje y lo guarda en el array.
                 $viaje = new Viaje;
                 $viaje->nombre = $line[0];
                 $viaje->apellido = $line[1];

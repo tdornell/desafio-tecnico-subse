@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('apellido');
             $table->string('documento');
             $table->string('organismo');
-            $table->decimal('viaticos', 10, 2); // Define la columna viaticos, con 10 dígitos y 2 decimales.
+            $table->decimal('viaticos', 12, 2); // Define la columna viaticos, con 10 dígitos y 2 decimales.
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->timestamps();
