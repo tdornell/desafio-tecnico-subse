@@ -68,6 +68,13 @@ class ViajesController extends Controller
 
             // Valida que la línea tenga el formato correcto.
             if (count($line) !== 7) {
+
+                // Valida que la línea no esté vacía.
+                if (count($line) === 1 && empty($line[0])) {
+                    // Si la línea está vacía, se omite.
+                    $line_number++;
+                    continue;
+                }
                 return redirect()->back()->withErrors(
                     [
                         'format' => "No se pudieron guardar los datos en la base de datos.\n" .
