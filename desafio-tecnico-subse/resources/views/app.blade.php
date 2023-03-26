@@ -33,6 +33,13 @@
                     </div>
                 @endif
 
+                <!-- Muestra un mensaje de error si ocurre un error en la conexión con la base de datos -->
+                @error('db.connection')
+                    <div class="alert alert-danger mt-3" role="alert">
+                        {!! nl2br(e($message)) !!}
+                    </div>
+                @enderror
+
                 <!-- Muestra un mensaje de error si el archivo no tiene el formato correcto -->
                 @error('format')
                     <div class="alert alert-danger mt-3" role="alert">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Viaje;
 use SplFileObject;
 
@@ -11,6 +12,7 @@ class ViajesController extends Controller
     /**
      * Lee el archivo CSV y guarda los viajes en la base de datos.
      * Se realizan las siguientes validaciones:
+     * - Que se encuentre la conexión a la base de datos.
      * - Que se haya seleccionado un archivo.
      * - Que el archivo sea un CSV.
      * - Que el archivo no esté vacío.
@@ -19,6 +21,18 @@ class ViajesController extends Controller
      */
 
     public function store(Request $request){
+        
+        // Valida la conexión con la base de datos.
+        try {
+            DB::connection()->getPdo();
+        } catch (\Exception $e) {
+            // Si no se pudo conectar con la base de datos, se redirige al formulario con un mensaje de error.
+            return redirect()->back()->withErrors(
+                [
+                    'db.connection' => "Error al conectarse con la base de datos. " .
+                                       "Verifique que la base de datos esté corriendo y que los datos de conexión sean correctos."
+                ]);
+        }
 
         // Valida que se haya seleccionado un archivo.
         if (!$request->hasFile('csv_file')) {
