@@ -28,7 +28,7 @@ Este proyecto se ha desarrollado con Laravel y MySQL. A continuación se detalla
     composer install
     ```
 
-4. Crear una base de datos en MySQL y configurar las credenciales en el archivo `desafio-tecnico-subse/.env`:
+4. Crear una base de datos en MySQL y configurar las credenciales en el archivo `desafio-tecnico-subse\.env` (si este no existe, copiar el archivo `.env.example` y renombrarlo a `.env`):
     ``` sh
     ...
     DB_CONNECTION=mysql
@@ -78,3 +78,20 @@ El sistema valida que:
 
 ## Archivo de prueba
 Para probar la funcionalidad de la aplicación, se proporciona un archivo CSV con datos ficticios de agentes, este se encuentra en [extra/datos_de_prueba.csv](extra/datos_de_prueba.csv).
+
+
+## Problemas comunes
+### Error al realizar migración en Windows con MySQL
+Si al ejecutar el comando `php artisan migrate` en Windows con MySQL se genera el siguiente error:
+```
+Illuminate\Database\QueryException
+could not find driver (Connection: mysql, SQL: select * from information_schema.tables where table_schema = name_db and table_name = migrations and table_type = 'BASE TABLE')
+```
+Puede deberse a que la extensión `pdo_mysql` no esté activada en PHP.
+
+Para solucionarlo, sigue estos pasos:
+
+1. Abre el archivo de configuraciónn php.ini.
+2. Busca la línea `;extension=pdo_mysql` y quítale el punto y coma para activar la extensión.
+3. Guarda los cambios y reinicia el servidor web y PHP si es necesario.
+4. Después de hacer esto, deberías poder ejecutar las migraciones sin problemas.
