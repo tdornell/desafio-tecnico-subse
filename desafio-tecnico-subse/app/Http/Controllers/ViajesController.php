@@ -22,11 +22,35 @@ class ViajesController extends Controller
 
         /** 
          * TODO: 
-         * Validar que se haya seleccionado un archivo.
-         * Validar que el archivo sea un CSV.
-         * Validar que el archivo no esté vacío.
          * Validar que los tipos de datos de cada campo sean correctos.
          */ 
+
+        // Valida que se haya seleccionado un archivo.
+        if (!$request->hasFile('csv_file')) {
+            return redirect()->back()->withErrors(
+                [
+                    'format' => "No se pudieron guardar los datos en la base de datos.\n" .
+                                "No se seleccionó ningún archivo."
+                ]);
+        }
+
+        // Valida que el archivo sea un CSV.
+        if ($request->file('csv_file')->getClientOriginalExtension() !== 'csv') {
+            return redirect()->back()->withErrors(
+                [
+                    'format' => "No se pudieron guardar los datos en la base de datos.\n" .
+                                "El archivo seleccionado no es un archivo CSV."
+                ]);
+        }
+
+        // Valida que el archivo no esté vacío.
+        if ($request->file('csv_file')->getSize() === 0) {
+            return redirect()->back()->withErrors(
+                [
+                    'format' => "No se pudieron guardar los datos en la base de datos.\n" .
+                                "El archivo CSV está vacío."
+                ]);
+        }
 
         // Obtiene el archivo CSV enviado desde el formulario.
         $csv_file = $request->file('csv_file');
@@ -44,7 +68,7 @@ class ViajesController extends Controller
         while (!$csv->eof()) {
             $line = $csv->fgetcsv();
 
-            // Si la línea no tiene 7 elementos, el archivo CSV no tiene el formato correcto.
+            // Valida que la línea tenga el formato correcto.
             if (count($line) !== 7) {
                 return redirect()->back()->withErrors(
                     [
